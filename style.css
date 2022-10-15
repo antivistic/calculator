@@ -37,6 +37,8 @@ footer {
 	height: 10vh;
 	background-color: white;
 	width: 80%;
+	text-align: right;
+	font-size: 36 px;
 }
 
 .buttons {
