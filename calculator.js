@@ -16,7 +16,7 @@ function inputButton(e) {
 }
 
 function setNumInput() {
-	if (numB == null) {
+	if (numB === null) {
 			numA = buttonId;
 			mainDisplay.textContent += `${numA}`;
 			numA = parseInt(mainDisplay.textContent);
@@ -28,79 +28,68 @@ function setNumInput() {
 }
 
 function setOperatorInput() {
-	if (numB != null) {
-		if (buttonId == 'operate') {
+	if (numB !== null) {
+		if (buttonId === 'operate' && numB === undefined) {return};
+
+		if (buttonId === 'operate') {
 			operate(prevOperator, numA, numB);
+			return;
+		} else if (numB === undefined) {
+			prevDisplay.textContent = numA + buttonContent;
+			mainDisplay.textContent = '';
+			prevOperator = buttonId;
+			return;
 		} else {
-		operate(buttonId, numA, numB);
-		numB = numA
-		prevDisplay.textContent = numB + buttonContent;
+		operate(prevOperator, numA, numB);
+		prevDisplay.textContent = numA + buttonContent;
 		mainDisplay.textContent = '';
+		numB = undefined;
+		prevOperator = buttonId;
 		}
 	} else {
-		switch (buttonId) {
-			case 'clear':
-				console.log('CLEAR ALL');
-				break;
-			case 'delete':
-				console.log('DELETE');
-				break;
-			case 'power':
-				console.log('POWER');
-				break;
-			case 'parity':
-				console.log('PARITY');
-				break;
-			case 'divide':
-				console.log('DIVIDE');
-				break;
-			case 'multiply':
-				console.log('MULTIPLY');
-				break;
-			case 'subtract':
-				console.log('SUBTRACT');
-				break;
-			case 'add':
-			console.log('passed');
-				numB = numA
-			    prevDisplay.textContent = numB + '+';
-			    mainDisplay.textContent = '';
-			    prevOperator = 'add';
-				break;
-			case 'operate':
-				return operate(operatorType, numA, numB);
-		};
+		if (buttonId === 'operate') {return};
+		prevDisplay.textContent = numA + buttonContent;
+		mainDisplay.textContent = '';
+		prevOperator = buttonId;
+		numB = undefined;
 	};
+}
+
+function setNewExpression() {
+	numB = numA
+	prevDisplay.textContent = numB + buttonContent;
+	mainDisplay.textContent = '';
+	prevOperator = buttonId;
 }
 
 function operate(operator,a,b) {
 	switch (operator) {
 		case 'add':
-			numA = add(numA, numB);
+			numA = a + b;;
 			numB = null;
 			prevDisplay.textContent = `${numA}`;
 			mainDisplay.textContent = '';
+			break;
 		case 'subtract':
-			return subtract(a, b);
+			numA = a - b;
+			numB = null;
+			prevDisplay.textContent = `${numA}`;
+			mainDisplay.textContent = '';
+			break;
 		case 'multiply':
-			return multiply(a, b);
+			numA = a * b;
+			numB = null;
+			prevDisplay.textContent = `${numA}`;
+			mainDisplay.textContent = '';
+			break;
 		case 'divide':
-			return divide(a, b);
+			if (b == 0) {
+				alert('You just destroyed the world by dividing by 0 and creating a singularity!');
+			}
+			numA = a / b;
+			numB = null;
+			prevDisplay.textContent = `${numA}`;
+			mainDisplay.textContent = '';
+			break;
 	};
-}
-
-function add(a, b) {
-	return a + b;
-}
-
-function subtract(a, b) {
-	return a - b;
-}
-
-function multiply(a, b) {
-	return a * b;
-}
-
-function divide(a, b) {
-	return a / b;
 }
